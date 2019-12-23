@@ -1,28 +1,35 @@
 package com.example.api.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class Customer {
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
 	@NotEmpty
+	@NotBlank(message = "Campo name é obrigatório")
 	private String name;
 
+
 	@Column(nullable = false)
-	@NotEmpty
 	@Email
+	@NotBlank(message = "Campo e-mail é obrigatório")
 	private String email;
+
+	@OneToMany(mappedBy = "customer")
+	private List<Endereco> enderecos;
+
+	@OneToOne
+	private Acesso acesso;
+
 
 	public Long getId() {
 		return id;
@@ -48,4 +55,28 @@ public class Customer {
 		this.email = email;
 	}
 
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public Acesso getAcesso() {
+		return acesso;
+	}
+
+	public void setAcesso(Acesso acesso) {
+		this.acesso = acesso;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", email='" + email + '\'' +
+				'}';
+	}
 }
